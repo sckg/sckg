@@ -49,7 +49,8 @@ class CWE(Generic):
                                                    'category_id': category['@ID'],
                                                    'name': category['@Name'],
                                                    'status': category['@Status'],
-                                                   'summary': category['Summary']
+                                                   'summary': category['Summary'],
+                                                   'cwe_meta_version': regime['meta']['cwe_version']
                                                }))
 
     for reference in r['external_references']:
@@ -65,7 +66,8 @@ class CWE(Generic):
                                                    'publication_year': reference.get('Publication_Year', 'not specified'),
                                                    'publication_month': reference.get('Publication_Month','not specified'),
                                                    'publication_day': reference.get('Publication_Day','not specified'),
-                                                   'url': reference.get('URL', 'not specified')
+                                                   'url': reference.get('URL', 'not specified'),
+                                                   'cwe_meta_version': regime['meta']['cwe_version']
                                                }))
 
     # build initial dict of weakness
@@ -80,7 +82,8 @@ class CWE(Generic):
         extended_description = str(itertools.chain.from_iterable(weakness['Extended_Description'].values())).replace('\'', '"').replace('\\', '\\\\')
       else:
         extended_description = weakness.get('Extended_Description', 'not specified').replace('\'', '"').replace('\\', '\\\\')
-      stmts.append(self.create_control_orphan(properties={
+      # stmts.append(self.create_control_orphan(properties={
+      stmts.append(self.create_weakness(properties={
           'name': weakness_id,
           'cwe_meta_version': regime['meta']['cwe_version'],
           'cwe_version': regime_dict['Weakness_Catalog']['@Version'],
@@ -95,8 +98,10 @@ class CWE(Generic):
       }))
 
     # helper function to map controls
-    def cwe_control(cwe_id, version, this_weakness):
+    def map_weakness(cwe_id, version, this_weakness):
       return self.map_control_orphan(
+              lhs_type='weakness',
+              rhs_type='weakness',
               lhs={
                   'name': cwe_id,
                   'cwe_meta_version': version
@@ -124,18 +129,20 @@ class CWE(Generic):
         if isinstance(related_weakness, OrderedDict):
           # If there's just one related weakness, this object will be an
           # OrderedDict
-          stmts.append(cwe_control(weakness_id, cwe_version, related_weakness))
+          stmts.append(map_weakness(weakness_id, cwe_version, related_weakness))
 
         if isinstance(related_weakness, list):
           # There might be more than one related weakness, in which case this
           # will be a list
           for related in related_weakness:
-            stmts.append(cwe_control(weakness_id, cwe_version, related))
+            stmts.append(map_weakness(weakness_id, cwe_version, related))
 
     # add top level weaknesses to the Weaknesses baseline
-    stmts.append("""MATCH (c:control {cwe_meta_version:'4.1'}) WHERE NOT (c)-[:CHILDOF]->(:control) WITH c
-MATCH (:regime {name: 'CWE'})-[:HAS]->(f:family {name: 'Weaknesses'}) WITH c, f
-MERGE (f)-[:HAS]->(c)""")
+    stmts.append("""MATCH (n:weakness) WHERE NOT (n)-[:CHILDOF]->() 
+WITH n 
+MATCH (r:regime {name: 'CWE'})-[:HAS]->(f:family {name: 'Weaknesses'})
+WITH n, r, f
+MERGE (f)-[:HAS]->(n);""")
 
     # now add references
     for weakness_id in weaknesses.keys():
@@ -144,109 +151,113 @@ MERGE (f)-[:HAS]->(c)""")
         if isinstance(weakness['References']['Reference'], list):
           for reference in weakness['References']['Reference']:
             stmts.append(self.map_control_orphan(
+                lhs_type='weakness',
+                rhs_type='control',
                 lhs={
                     'name': weakness_id,
                     'cwe_meta_version': '4.1'
                 },
                 rhs={
-                    'name': reference['@External_Reference_ID'],
+                    'reference_id': reference['@External_Reference_ID'],
                     'cwe_meta_version': '4.1'
                 },
                 relationship='REFERSTO',
                 properties={
-                    'section': reference.get('@Section', 'not specified')
+                    'section': reference.get('@Section', 'not specified').replace('\'', '\\\'')
                 }
             ))
         else:
           reference = weakness['References']['Reference']
           stmts.append(self.map_control_orphan(
+              lhs_type='weakness',
+              rhs_type='control',
               lhs={
                   'name': weakness_id,
                   'cwe_meta_version': '4.1'
               },
               rhs={
-                  'name': reference['@External_Reference_ID'],
+                  'reference_id': reference['@External_Reference_ID'],
                   'cwe_meta_version': '4.1'
               },
               relationship='REFERSTO',
               properties={
-                  'section': reference.get('@Section', 'not specified')
+                  'section': reference.get('@Section', 'not specified').replace('\'', '\\\'')
               }
           ))
-
-      # todo: handle ordanalities
-
-      # add platform mappings
-      def create_platform_control(platform, entry):
-        if entry.get('@Class') and not entry.get('@Name'):
-          platform_name = entry.get('@Class')
-        else:
-          platform_name = entry.get('@Name')
-        stmts.append(self.create_geneirc_control('CWE',
-                                                 'control',
-                                                 platform,
-                                                 properties={
-                                                     'name': platform_name,
-                                                 }))
-        debug_stmt2 = self.create_geneirc_control('CWE',
-                                                 'control',
-                                                 platform,
-                                                 properties={
-                                                     'name': platform_name,
-                                                 })
-        pause = True
-        return platform_name
-
-      for weakness_id in weaknesses.keys():
-        weakness = weaknesses[weakness_id]
-        if weakness.get('Applicable_Platforms'):
-          for platform in weakness['Applicable_Platforms'].keys():
-            stmts.append(self.create_geneirc_control('CWE',
-                                                     'family',
-                                                     'Platforms',
-                                                     properties={
-                                                         'name': platform,
-                                                         'cwe_platform': 'true'
-                                                     }))
-            debug_stmt = self.create_geneirc_control('CWE',
-                                                     'family',
-                                                     'Platforms',
-                                                     properties={
-                                                         'name': platform,
-                                                         'cwe_platform': 'true'
-                                                     })
-            pause = True
-
-            if isinstance(weakness['Applicable_Platforms'][platform], list):
-              for platform_entry in weakness['Applicable_Platforms'][platform]:
-                control_platform_name = create_platform_control(platform, platform_entry)
-                stmts.append(self.map_control_orphan(
-                    lhs={
-                        'name': control_platform_name,
-                        'cve_meta_version': cwe_version,
-                        'cwe_platform': 'true'
-                    },
-                    rhs={
-                        'name': weakness_id,
-                        'cve_meta_version': cwe_version
-                    },
-                    relationship='HAS',
-                    properties={}
-                ))
-            if isinstance(weakness['Applicable_Platforms'][platform], OrderedDict):
-              control_platform_name = create_platform_control(platform, weakness['Applicable_Platforms'][platform])
-              stmts.append(self.map_control_orphan(
-                  lhs={
-                      'name': control_platform_name,
-                      'cve_meta_version': cwe_version,
-                      'cwe_platform': 'true'
-                  },
-                  rhs={
-                      'name': weakness_id,
-                      'cve_meta_version': cwe_version
-                  },
-                  relationship='HAS',
-                  properties={}
-              ))
+#
+#       # todo: handle ordanalities
+#
+#       # add platform mappings
+#       def create_platform_control(platform, entry):
+#         if entry.get('@Class') and not entry.get('@Name'):
+#           platform_name = entry.get('@Class')
+#         else:
+#           platform_name = entry.get('@Name')
+#         stmts.append(self.create_geneirc_control('CWE',
+#                                                  'control',
+#                                                  platform,
+#                                                  properties={
+#                                                      'name': platform_name,
+#                                                  }))
+#         debug_stmt2 = self.create_geneirc_control('CWE',
+#                                                  'control',
+#                                                  platform,
+#                                                  properties={
+#                                                      'name': platform_name,
+#                                                  })
+#         pause = True
+#         return platform_name
+#
+#       for weakness_id in weaknesses.keys():
+#         weakness = weaknesses[weakness_id]
+#         if weakness.get('Applicable_Platforms'):
+#           for platform in weakness['Applicable_Platforms'].keys():
+#             stmts.append(self.create_geneirc_control('CWE',
+#                                                      'family',
+#                                                      'Platforms',
+#                                                      properties={
+#                                                          'name': platform,
+#                                                          'cwe_platform': 'true'
+#                                                      }))
+#             debug_stmt = self.create_geneirc_control('CWE',
+#                                                      'family',
+#                                                      'Platforms',
+#                                                      properties={
+#                                                          'name': platform,
+#                                                          'cwe_platform': 'true'
+#                                                      })
+#             pause = True
+#
+#             if isinstance(weakness['Applicable_Platforms'][platform], list):
+#               for platform_entry in weakness['Applicable_Platforms'][platform]:
+#                 control_platform_name = create_platform_control(platform, platform_entry)
+#                 stmts.append(self.map_control_orphan(
+#                     lhs={
+#                         'name': control_platform_name,
+#                         'cve_meta_version': cwe_version,
+#                         'cwe_platform': 'true'
+#                     },
+#                     rhs={
+#                         'name': weakness_id,
+#                         'cve_meta_version': cwe_version
+#                     },
+#                     relationship='HAS',
+#                     properties={}
+#                 ))
+#             if isinstance(weakness['Applicable_Platforms'][platform], OrderedDict):
+#               control_platform_name = create_platform_control(platform, weakness['Applicable_Platforms'][platform])
+#               stmts.append(self.map_control_orphan(
+#                   lhs={
+#                       'name': control_platform_name,
+#                       'cve_meta_version': cwe_version,
+#                       'cwe_platform': 'true'
+#                   },
+#                   rhs={
+#                       'name': weakness_id,
+#                       'cve_meta_version': cwe_version
+#                   },
+#                   relationship='HAS',
+#                   properties={}
+#               ))
 
     return stmts
