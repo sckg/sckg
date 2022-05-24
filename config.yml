@@ -127,9 +127,6 @@ regimes:
       baseline_name: 'Classified Information'
       control_regime: '800_53'
       uid_key: 'control'
-    etl:
-      module: 'sckg.etl.cnssi_1253_nss'
-      class: 'CNSSI1253NSS'
   - name: 'cnssi_1253_pii'
     description: 'CNSSI 1253 Privacy Overlay'
     document:
