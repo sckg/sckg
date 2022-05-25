@@ -436,3 +436,8 @@ class Generic(object):
     stmt = self.render_template('weakness.j2',
                                 properties=kwargs['properties'])
     return stmt
+
+  def create_vulnerability(self, **kwargs):
+    stmt = self.render_template('vulnerability.j2',
+                                properties=kwargs['properties'])
+    return stmt
