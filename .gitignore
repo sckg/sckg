@@ -106,6 +106,7 @@ celerybeat.pid
 .venv
 env/
 venv/
+venv*/
 ENV/
 env.bak/
 venv.bak/
@@ -140,3 +141,5 @@ sckg/etl/private
 data/regimes/private
 venn.*
 build.cypher
+
+data/query_output/weaknesses.txt

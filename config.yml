@@ -329,4 +329,13 @@ regimes:
         ID.RM: "Risk Management Strategy (ID.RM): The organization’s priorities, constraints, risk tolerances, and assumptions are established and used to support operational risk decisions."
         DE.CM: "Security Continuous Monitoring (DE.CM): The information system and assets are monitored to identify cybersecurity events and verify the effectiveness of protective measures."
         ID.SC: "Supply Chain Risk Management (ID.SC): The organization’s priorities, constraints, risk tolerances, and assumptions are established and used to support risk decisions associated with managing supply chain risk. The organization has established and implemented the processes to identify, assess and manage supply chain risks."
-
+  - name: 'cwe'
+    description: 'CWE'
+    document:
+      source: 'https://cwe.mitre.org/data/xml/cwec_v4.1.xml.zip'
+      parsable: 'data/regimes/cwec_v4.1.xml'
+    etl:
+      module: 'sckg.etl.cwe'
+      class: 'CWE'
+    meta:
+      cwe_version: '4.1'
