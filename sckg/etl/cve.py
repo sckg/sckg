@@ -56,7 +56,7 @@ class CVE(Generic):
               'cve_id': cve_id,
               'name': cve_id,
               'assigner': cve_assigner,
-              'description': cve_description.replace('\'', '\\\'')
+              'description': cve_description.replace('\\', '\\\\').replace("\'", "\\'")
           }
       ))
 
