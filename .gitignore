@@ -143,3 +143,4 @@ venn.*
 build.cypher
 
 data/query_output/weaknesses.txt
+data/regimes/bq_nvd.json
