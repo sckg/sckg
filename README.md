@@ -15,7 +15,7 @@ The goal of this project is not to create yet-another-compliance-regime, but ins
 First, clone this repo to your desktop.
 
 ```bash
-git clone https://gitlab.com/sckg/sckg
+git clone https://github.com/sckg/sckg
 cd sckg
 ```
 
