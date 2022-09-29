@@ -140,3 +140,15 @@ sckg/etl/private
 data/regimes/private
 venn.*
 build.cypher
+
+._.DS_Store
+._private.yml
+._secrets
+.vscode/
+._private
+*/._.DS_Store
+*/._private.yml
+*/._secrets
+*/.vscode/
+*/._private
+
