@@ -127,9 +127,9 @@ regimes:
       baseline_name: 'Classified Information'
       control_regime: '800_53'
       uid_key: 'control'
-    etl:
-      module: 'sckg.etl.cnssi_1253_nss'
-      class: 'CNSSI1253NSS'
+#    etl:
+#      module: 'sckg.etl.cnssi_1253_nss'
+#      class: 'CNSSI1253NSS'
   - name: 'cnssi_1253_pii'
     description: 'CNSSI 1253 Privacy Overlay'
     document:
@@ -332,4 +332,12 @@ regimes:
         ID.RM: "Risk Management Strategy (ID.RM): The organization’s priorities, constraints, risk tolerances, and assumptions are established and used to support operational risk decisions."
         DE.CM: "Security Continuous Monitoring (DE.CM): The information system and assets are monitored to identify cybersecurity events and verify the effectiveness of protective measures."
         ID.SC: "Supply Chain Risk Management (ID.SC): The organization’s priorities, constraints, risk tolerances, and assumptions are established and used to support risk decisions associated with managing supply chain risk. The organization has established and implemented the processes to identify, assess and manage supply chain risks."
+#  - name: '800_171'
+#    description: 'NIST SP 800-171r2'
+#    document:
+#      source: 'https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-171r2.pdf'
+#      parsable: 'data/regimes/800-171r2.tsv'
+#    etl:
+#      module: 'sckg.etl.nist_800_171'
+#      class: 'NIST800171'
 

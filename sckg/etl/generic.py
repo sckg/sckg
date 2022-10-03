@@ -66,8 +66,8 @@ class Generic(object):
                                           baseline['uid_key'],
                                           regime_list)
     else:
-      raise Exception('no baseline for regime "{}" in config.yml. \n'
-                      'generic transform currently only supports '
+      raise Exception('no baseline for regime \'{}\' in config.yml. \n' +
+                      'generic transform currently only supports ' +
                       'baselines'.format(regime['name']))
 
   def load(self, regime, neo4j, stmts):
