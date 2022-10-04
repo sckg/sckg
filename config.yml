@@ -340,4 +340,23 @@ regimes:
 #    etl:
 #      module: 'sckg.etl.nist_800_171'
 #      class: 'NIST800171'
-
+  - name: 'cwe'
+    description: 'CWE'
+    document:
+      source: 'https://cwe.mitre.org/data/xml/cwec_v4.1.xml.zip'
+      parsable: 'data/regimes/cwec_v4.1.xml'
+    etl:
+      module: 'sckg.etl.cwe'
+      class: 'CWE'
+    meta:
+      cwe_version: '4.1'
+  - name: 'cve'
+    description: 'CVE'
+    document:
+      source: 'https://github.com/bq-nvd/bq-nvd'
+      parsable: 'data/regimes/bq_nvd.json'
+    etl:
+      module: 'sckg.etl.cve'
+      class: 'CVE'
+    meta:
+      bq_nvd_date: '20220525'

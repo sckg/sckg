@@ -246,6 +246,11 @@ class Generic(object):
 
     return Template(j2t.rstrip()).render(args=args,
                                          names=kwargs.get('names', {}),
+                                         relationship=kwargs.get('relationship', ''),
+                                         lhs=kwargs.get('lhs', {}),
+                                         rhs=kwargs.get('rhs', {}),
+                                         lhs_type=kwargs.get('lhs_type', ''),
+                                         rhs_type=kwargs.get('rhs_type', ''),
                                          properties=p)
 
   def clean_dict(self, d: dict):
@@ -408,6 +413,30 @@ class Generic(object):
 
   def create_baseline_baseline_map(self, **kwargs):
     stmt = self.render_template('baseline_baseline_map.j2',
-                                names=kwargs['names'],
+                                names=kwargs['names'])
+    return stmt
+
+  def create_control_orphan(self, **kwargs):
+    stmt = self.render_template('control_orphan.j2',
+                                properties=kwargs['properties'])
+    return stmt
+
+  def map_control_orphan(self, **kwargs):
+    stmt = self.render_template('mapping_rich.j2',
+                                lhs_type=kwargs['lhs_type'],
+                                rhs_type=kwargs['rhs_type'],
+                                lhs=kwargs['lhs'],
+                                rhs=kwargs['rhs'],
+                                relationship=kwargs['relationship'],
+                                properties=kwargs['properties'])
+    return stmt
+
+  def create_weakness(self, **kwargs):
+    stmt = self.render_template('weakness.j2',
+                                properties=kwargs['properties'])
+    return stmt
+
+  def create_vulnerability(self, **kwargs):
+    stmt = self.render_template('vulnerability.j2',
                                 properties=kwargs['properties'])
     return stmt
