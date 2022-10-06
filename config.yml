@@ -368,3 +368,11 @@ regimes:
     etl:
       module: 'sckg.etl.nist_800_172'
       class: 'NIST800172'
+  - name: 'csf_800_171r2'
+    description: 'CSF mappings to 800-171r2'
+    document:
+      source: 'https://csrc.nist.gov/CSRC/media/Publications/sp/800-171/rev-2/final/documents/csf-v1-0-to-sp800-171rev2-mapping.xlsx'
+      parsable: 'data/regimes/csf_800-171r2.tsv'
+    etl:
+      module: 'sckg.etl.csf_800_171r2'
+      class: 'CSF800171'
