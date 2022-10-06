@@ -44,6 +44,18 @@ class NIST800172(Generic):
                                                    'protection_strategy': protection_strategy,
                                                    'adversary_effects': adversary_effects
                                                }))
-
+      # associate 800-172 controls with identifiers from 800-171r2
+      identifier_171 = identifier.replace('e', '')
+      stmts.append(self.create_control_control_map(names={
+          'by_regime': True,
+          'mapping_regime': regime_name,
+          'mapped_regime': 'NIST 800-171r2',
+          'mapping_control': identifier,
+          'mapped_control': identifier_171,
+          'relationship': 'ENHANCES'
+      },
+      properties={
+          'derived': True
+      }))
 
     return stmts
