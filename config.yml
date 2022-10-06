@@ -353,10 +353,18 @@ regimes:
     meta:
       bq_nvd_date: '20220525'
   - name: '800_171'
-    description: 'NIST SP 800-171r2'
+    description: 'NIST 800-171r2'
     document:
       source: 'https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-171r2.pdf'
       parsable: 'data/regimes/800-171r2.tsv'
     etl:
       module: 'sckg.etl.nist_800_171'
       class: 'NIST800171'
+  - name: '800_172'
+    description: 'NIST 800-172'
+    document:
+      source: 'https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-172.pdf'
+      parsable: 'data/regimes/800-172.tsv'
+    etl:
+      module: 'sckg.etl.nist_800_172'
+      class: 'NIST800172'
