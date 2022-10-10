@@ -22,7 +22,7 @@ cd sckg
 ### Database setup
 Currently, this project supports only Neo4j as the backend graph database. The next step to building your own sckg is to [download and install Neo4j Desktop](https://neo4j.com/download/).
 
-[Create a database](https://neo4j.com/developer/neo4j-desktop/#desktop-create-db) and start it.
+[Create a database](https://neo4j.com/developer/neo4j-desktop/#desktop-create-DBMS) and start it.
 
 When Neo4j is newly installed, the default username and passwords should be used. 
 
