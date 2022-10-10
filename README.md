@@ -47,7 +47,7 @@ EOF
 
 The fastest way to get up and running is to load from one of the included database dumps. Use the `neo4j-admin` command to load a dump from the [data/dumps](data/dumps) directory. 
 
-Refer to the `neo4j-admin load` [example](https://neo4j.com/docs/operations-manual/current/tools/dump-load/) in the Neo4j docs.
+Refer to the `neo4j-admin load` [example](https://neo4j.com/docs/operations-manual/current/backup-restore/restore-dump/) in the Neo4j docs.
 
 ### Tabular query output
 
