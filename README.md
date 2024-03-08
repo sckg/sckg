@@ -22,9 +22,14 @@ cd sckg
 ### Database setup
 Currently, this project supports only Neo4j as the backend graph database. The next step to building your own sckg is to [download and install Neo4j Desktop](https://neo4j.com/download/).
 
-[Create a database](https://neo4j.com/developer/neo4j-desktop/#desktop-create-db) and start it.
+[Create a database](https://neo4j.com/developer/neo4j-desktop/#desktop-create-DBMS) and start it.
 
-When Neo4j is newly installed, the default user *neo4j* has the default password *neo4j* . The default password must be changed before access to resources will be permitted.
+When Neo4j is newly installed, the default username and passwords should be used. 
+
+- username: *neo4j* 
+- password *neo4j* 
+
+The default password must be changed before access to resources will be permitted.
 
 Once installed, make a file called `neo4j.yml` in a directory called `secrets` and populate it with the connection details for your neo4j database.
 
@@ -42,7 +47,7 @@ EOF
 
 The fastest way to get up and running is to load from one of the included database dumps. Use the `neo4j-admin` command to load a dump from the [data/dumps](data/dumps) directory. 
 
-Refer to the `neo4j-admin load` [example](https://neo4j.com/docs/operations-manual/current/tools/dump-load/) in the Neo4j docs.
+Refer to the `neo4j-admin load` [example](https://neo4j.com/docs/operations-manual/current/backup-restore/restore-dump/) in the Neo4j docs.
 
 ### Tabular query output
 
