@@ -153,6 +153,19 @@ regimes:
       baseline_name: 'None'
       control_regime: '800_53'
       uid_key: 'control'
+  - name: 'dod_srg_1_4'
+    description: 'DoD SRG v1.4'
+    document:
+      source: 'https://rmf.org/wp-content/uploads/2018/05/Cloud_Computing_SRG_v1r4.pdf'
+      parsable: 'data/regimes/dod_srg_1_4.tsv'
+    etl:
+      module: 'sckg.etl.dod_srg_1_4'
+      class: 'DoDSRG14'
+    baseline:
+      regime_name: 'DoD SRG 1.4'
+      baseline_name: 'None'
+      control_regime: '800_53'
+      uid_key: 'control'
   - name: 'cis'
     description: 'CIS CSC'
     document:

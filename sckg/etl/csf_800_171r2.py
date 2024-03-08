@@ -15,11 +15,11 @@ class CSF800171(Generic):
             names={
               'by_regime': True,
               'csf_800_171': True,
-              'mapping_regime': 'NIST 800-171r2',
-              'mapped_regime': 'NIST CSF',
-              'mapping_control': identifier,
-              'mapped_control': subcategory,
-              'relationship': 'REFERSTO'
+              'mapped_regime': 'NIST 800-171r2',
+              'mapping_regime': 'NIST CSF',
+              'mapped_control': identifier,
+              'mapping_control': subcategory,
+              'relationship': 'REQUIRES'
             },
             properties={'mapping': 'csf'}))
 
