@@ -1,0 +1,5 @@
+services:
+  neo4j:
+    environment:
+      - NEO4J_server_memory_heap_initial__size=4G
+      - NEO4J_server_memory_heap_max__size=4G
