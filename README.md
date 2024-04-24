@@ -20,8 +20,9 @@ cd sckg
 ```
 
 ### Database setup
-Currently, this project supports only Neo4j as the backend graph database. The next step to building your own sckg is to [download and install Neo4j Desktop](https://neo4j.com/download/).
+Currently, this project supports only Neo4j as the backend graph database. The next step to building your own sckg is to either [download and install Neo4j Desktop](https://neo4j.com/download/) or to use the included docker-compose.yml to spin up a local container of neo4j.
 
+#### OPTION 1: Download and Install
 [Create a database](https://neo4j.com/developer/neo4j-desktop/#desktop-create-DBMS) and start it.
 
 When Neo4j is newly installed, the default username and passwords should be used. 
@@ -30,6 +31,23 @@ When Neo4j is newly installed, the default username and passwords should be used
 - password *neo4j* 
 
 The default password must be changed before access to resources will be permitted.
+
+#### OPTION 2: Docker Compose
+Replace the `docker/.env.example` file with a `.env` file that contains your neo4j password.
+```bash
+cp ./docker/.env.example ./docker/.env
+```
+
+Optionally, you can set the amount of memory that the neo4j container can consume using the `docker/docker-compose.override.example` file; however this is not needed.
+```bash
+cp ./docker/docker-compose.override.example docker/docker-compose.override
+```
+
+Spin up the docker container using docker compose.
+```bash
+cd ./docker
+docker compose up -d
+```
 
 Once installed, make a file called `neo4j.yml` in a directory called `secrets` and populate it with the connection details for your neo4j database.
 

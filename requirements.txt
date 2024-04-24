@@ -1,8 +1,7 @@
 Jinja2>=2.11.3
 lxml>=4.6.5
 MarkupSafe==1.1.1
-neo4j==1.7.6
-neobolt==1.7.15
+neo4j==5.18.0
 neotime==1.7.4
 pytz==2019.3
 PyYAML>=5.4
